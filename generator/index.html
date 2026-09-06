@@ -50,6 +50,15 @@
   .drop .ic{width:44px;height:44px;border-radius:12px;background:var(--cyan-tint);color:var(--cyan-strong);display:grid;place-items:center;margin:0 auto 12px}
   .drop b{display:block;font-size:14px;margin-bottom:3px}
   .drop span{font-size:12.5px;color:var(--muted)}
+  .drop.hot{border-color:var(--cyan);background:var(--cyan-tint)}
+  .flist{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+  .fchip{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--surface-2);font-size:13px}
+  .fchip .fi{width:26px;height:26px;border-radius:7px;background:var(--cyan-tint);color:var(--cyan-strong);display:grid;place-items:center;flex:0 0 auto;font-size:10px;font-weight:800}
+  .fchip .fn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fchip .fs{color:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums}
+  .fchip .rm{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;padding:2px 6px;border-radius:6px}
+  .fchip .rm:hover{color:var(--ink);background:var(--surface-3)}
+  .fcount{font-size:12px;color:var(--muted);margin-top:10px}
   .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 4px}
   @media(max-width:640px){.grid{grid-template-columns:1fr 1fr}}
   .stat{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--surface-2)}
@@ -98,12 +107,16 @@
 
   <!-- STEP 1 -->
   <div class="card" id="card0">
-    <h2>1 · Plan hochladen</h2>
-    <div class="sub">PDF oder DWG der PVA (Stationsschema, RI01/RI02). Der Pilot simuliert die Auslesung mit Beispieldaten.</div>
+    <h2>1 · Pläne hochladen</h2>
+    <div class="sub">PDF oder DWG der PV-Anlage. <b>Mehrere Dateien möglich:</b> mehrere Blätter einer Anlage (z. B. RI01 Stationen + RI02 DC + Feldplan) oder mehrere Anlagen auf einmal. Der Pilot simuliert die Auslesung.</div>
+    <input type="file" id="fileInput" accept=".pdf,.dwg,.png,.jpg,.jpeg" multiple style="display:none">
     <div class="drop" id="drop">
       <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0l-4 4m4-4l4 4M5 20h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <b>Plan hier ablegen oder klicken</b><span>19-178_RI02.pdf · max. 50 MB</span>
+      <b>Pläne hier ablegen oder klicken</b><span>Mehrfachauswahl möglich · PDF / DWG · max. 50 MB je Datei</span>
     </div>
+    <div class="flist" id="fileList"></div>
+    <div class="fcount" id="fileCount"></div>
+    <div class="row-actions"><button class="btn" id="toErk" type="button" disabled>Auslesen &amp; weiter</button></div>
   </div>
 
   <!-- STEP 2 -->
@@ -167,7 +180,26 @@
     });
     window.scrollTo({top:0,behavior:'smooth'});
   }
-  document.getElementById('drop').onclick=function(){setTimeout(function(){step(1);},250);};
+  // Mehrfach-Upload
+  var files=[];
+  var drop=document.getElementById('drop'), fi=document.getElementById('fileInput');
+  var fList=document.getElementById('fileList'), fCount=document.getElementById('fileCount'), toErk=document.getElementById('toErk');
+  function fmt(b){ if(!b) return ''; var u=['B','KB','MB']; var i=Math.min(2,Math.floor(Math.log(b)/Math.log(1024))); return (b/Math.pow(1024,i)).toFixed(i?1:0)+' '+u[i]; }
+  function renderFiles(){
+    fList.innerHTML=files.map(function(f,i){
+      return '<div class="fchip"><span class="fi">PDF</span><span class="fn">'+f.name+'</span><span class="fs">'+fmt(f.size)+'</span><button class="rm" data-i="'+i+'" title="entfernen">×</button></div>';
+    }).join('');
+    fCount.textContent = files.length ? files.length+' Plan/Pläne bereit · werden zusammen ausgelesen' : '';
+    toErk.disabled = files.length===0;
+  }
+  function addFiles(list){ for(var i=0;i<list.length;i++){ files.push(list[i]); } renderFiles(); }
+  drop.onclick=function(){ fi.click(); };
+  fi.onchange=function(){ if(fi.files&&fi.files.length){ addFiles(fi.files); fi.value=''; } };
+  drop.addEventListener('dragover',function(e){ e.preventDefault(); drop.classList.add('hot'); });
+  drop.addEventListener('dragleave',function(){ drop.classList.remove('hot'); });
+  drop.addEventListener('drop',function(e){ e.preventDefault(); drop.classList.remove('hot'); if(e.dataTransfer&&e.dataTransfer.files.length){ addFiles(e.dataTransfer.files); } });
+  fList.addEventListener('click',function(e){ var b=e.target.closest('.rm'); if(b){ files.splice(+b.dataset.i,1); renderFiles(); } });
+  toErk.onclick=function(){ step(1); };
   document.getElementById('back1').onclick=function(){step(0);};
   document.getElementById('to2').onclick=function(){step(2);};
   document.getElementById('back2').onclick=function(){step(1);};
