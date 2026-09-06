@@ -1,0 +1,370 @@
+<title>DGUV Prüf-App Mockup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --bg:#eef1f2; --surface:#ffffff; --surface-2:#f3f5f6;
+    --ink:#0d0e11; --ink-2:#454b4e; --muted:#7e8587; --line:#d9dddf; --line-2:#e6e9ea;
+    --cyan:#12aec4; --cyan-strong:#0c8497; --cyan-tint:#e4f6f9; --on-cyan:#04191d;
+    --surface-3:#e8eced;
+    --ok:#12804a; --ok-bg:#e3f4ec; --ok-line:#a4d8bb;
+    --warn:#9a6510; --warn-bg:#f8efd8; --warn-line:#e6cd8b;
+    --crit:#b52d24; --crit-bg:#fbe3e1; --crit-line:#eaa9a3;
+    --np:#6f7679; --np-bg:#e9ebec; --np-line:#d0d4d6;
+    --phone-bg:#0d0e11;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#0a0b0d; --surface:#16181c; --surface-2:#1c1f24; --surface-3:#23272c;
+    --ink:#f1f3f4; --ink-2:#b9c0c3; --muted:#8a9194; --line:#2a2e34; --line-2:#23272c;
+    --cyan:#25c3da; --cyan-strong:#5bd4e6; --cyan-tint:#0f2b30; --on-cyan:#03161a;
+    --ok:#48c684; --ok-bg:#123020; --ok-line:#245c3d;
+    --warn:#e0a63c; --warn-bg:#332504; --warn-line:#5c481a;
+    --crit:#e5645b; --crit-bg:#361310; --crit-line:#5e2a26;
+    --np:#8a9194; --np-bg:#23262b; --np-line:#343a40;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0a0b0d; --surface:#16181c; --surface-2:#1c1f24; --surface-3:#23272c;
+    --ink:#f1f3f4; --ink-2:#b9c0c3; --muted:#8a9194; --line:#2a2e34; --line-2:#23272c;
+    --cyan:#25c3da; --cyan-strong:#5bd4e6; --cyan-tint:#0f2b30; --on-cyan:#03161a;
+    --ok:#48c684; --ok-bg:#123020; --ok-line:#245c3d;
+    --warn:#e0a63c; --warn-bg:#332504; --warn-line:#5c481a;
+    --crit:#e5645b; --crit-bg:#361310; --crit-line:#5e2a26;
+    --np:#8a9194; --np-bg:#23262b; --np-line:#343a40;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:26px 20px 70px}
+  .toolbar{display:flex;justify-content:flex-end;padding:8px 20px;gap:8px}
+  button.tool{font:inherit;font-size:12.5px;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+  button.tool:hover{border-color:var(--cyan)}
+
+  .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan-strong);font-weight:700}
+  h1{font-size:30px;margin:8px 0 6px;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+  .lede{color:var(--ink-2);font-size:15.5px;max-width:70ch}
+
+  .grid{display:grid;grid-template-columns:390px 1fr;gap:30px;margin-top:26px;align-items:start}
+  @media(max-width:900px){.grid{grid-template-columns:1fr;gap:26px}}
+
+  /* phone */
+  .phone-wrap{position:sticky;top:14px}
+  @media(max-width:900px){.phone-wrap{position:static}}
+  .phone{width:372px;max-width:100%;margin:0 auto;background:var(--phone-bg);border-radius:38px;padding:11px;box-shadow:0 24px 60px rgba(15,25,30,.28),0 4px 12px rgba(15,25,30,.12)}
+  .screen{background:var(--surface);border-radius:29px;overflow:hidden;height:722px;display:flex;flex-direction:column;position:relative}
+  .statusbar{height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:11px;color:var(--muted);font-weight:600}
+  .statusbar .dots{letter-spacing:2px}
+  .appbar{padding:10px 16px 12px;border-bottom:1px solid var(--line-2);background:var(--surface)}
+  .appbar .brand{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .appbar .mark{width:22px;height:22px;border-radius:6px;background:linear-gradient(135deg,var(--cyan),var(--cyan-strong));display:grid;place-items:center;color:var(--on-cyan)}
+  .appbar .mark svg{width:13px;height:13px}
+  .appbar .brand b{font-size:12px;letter-spacing:.13em;font-weight:700}
+  .appbar .brand span{font-size:9px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+  .vorgang{display:flex;align-items:center;gap:10px}
+  .vorgang .info{min-width:0;flex:1}
+  .vorgang .info b{font-size:14.5px;display:block;letter-spacing:-.01em}
+  .vorgang .info span{font-size:11.5px;color:var(--muted)}
+  .ring{width:44px;height:44px;flex:0 0 auto;position:relative}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .val{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--cyan-strong)}
+
+  .stationbar{display:flex;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line-2);overflow-x:auto}
+  .st-chip{flex:0 0 auto;font-size:11.5px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink-2);cursor:pointer;white-space:nowrap}
+  .st-chip.active{background:var(--cyan);border-color:var(--cyan);color:var(--on-cyan);font-weight:700}
+
+  .steps{display:flex;padding:9px 12px 3px;gap:6px}
+  .step{flex:1;text-align:center;font-size:11px;font-weight:700;padding:8px 4px;border-radius:10px 10px 0 0;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+  .step .n{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:var(--surface-3);color:var(--muted);font-size:10px;margin-right:3px;vertical-align:middle}
+  .step.active{color:var(--cyan-strong);border-bottom-color:var(--cyan)}
+  .step.active .n{background:var(--cyan);color:var(--on-cyan)}
+  .step.done .n{background:var(--ok);color:#fff}
+
+  .body{flex:1;overflow-y:auto;padding:12px 14px 90px}
+  .card{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:12px;background:var(--surface)}
+  .card-h{display:flex;align-items:center;gap:8px;padding:9px 13px;background:var(--surface-2);border-bottom:1px solid var(--line-2);font-size:12.5px;font-weight:700}
+  .card-h .cnt{margin-left:auto;font-size:10.5px;color:var(--muted);font-weight:600}
+  .row{display:flex;align-items:center;gap:9px;padding:9px 13px;font-size:13px;border-bottom:1px solid var(--line-2)}
+  .row:last-child{border-bottom:0}
+  .row .lbl{flex:1;min-width:0}
+  .row .lbl small{display:block;color:var(--muted);font-size:10.5px;font-family:var(--mono)}
+  .tri{display:inline-flex;gap:4px}
+  .tri button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-weight:800;font-size:12px;cursor:pointer}
+  .tri button.g.on{background:var(--ok);border-color:var(--ok);color:#fff}
+  .tri button.m.on{background:var(--crit);border-color:var(--crit);color:#fff}
+  .tri button.n.on{background:var(--np);border-color:var(--np);color:#fff}
+
+  /* measurement */
+  .meas{padding:11px 13px;border-bottom:1px solid var(--line-2)}
+  .meas:last-child{border-bottom:0}
+  .meas .top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .meas .top b{font-size:13px}
+  .meas .lamp{width:12px;height:12px;border-radius:50%;background:var(--np);margin-left:auto;flex:0 0 auto;box-shadow:0 0 0 3px transparent;transition:.15s}
+  .meas .lamp.ok{background:var(--ok);box-shadow:0 0 0 3px var(--ok-bg)}
+  .meas .lamp.bad{background:var(--crit);box-shadow:0 0 0 3px var(--crit-bg)}
+  .meas .inrow{display:flex;gap:8px;align-items:center}
+  .meas select,.meas input{font:inherit;font-size:12.5px;padding:8px 9px;border-radius:9px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+  .meas select{flex:1;min-width:0}
+  .meas input{width:78px;text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+  .meas .unit{font-size:12px;color:var(--muted);min-width:26px}
+  .meas .grz{font-size:10.5px;color:var(--muted);font-family:var(--mono);margin-top:6px}
+  .add{width:100%;padding:10px;border:1.5px dashed var(--cyan-line,var(--cyan));border-radius:12px;background:var(--cyan-tint);color:var(--cyan-strong);font:inherit;font-weight:700;font-size:12.5px;cursor:pointer;margin-top:2px}
+  .add:hover{filter:brightness(.97)}
+
+  .foot{position:absolute;left:0;right:0;bottom:0;padding:11px 14px;background:linear-gradient(0deg,var(--surface) 72%,transparent);border-top:1px solid var(--line-2);display:flex;gap:9px;align-items:center}
+  .cta{flex:1;padding:12px;border-radius:12px;border:0;background:var(--cyan);color:var(--on-cyan);font:inherit;font-weight:800;font-size:13.5px;cursor:pointer}
+  .cta.ghost{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+  .cta:disabled{opacity:.5;cursor:not-allowed}
+
+  .toast{position:absolute;left:14px;right:14px;bottom:78px;background:var(--ink);color:var(--surface);padding:11px 14px;border-radius:12px;font-size:12.5px;font-weight:600;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;display:flex;gap:8px;align-items:center}
+  .toast.show{opacity:1;transform:none}
+
+  .pill{font-size:10px;font-weight:700;letter-spacing:.03em;padding:2px 8px;border-radius:999px;text-transform:uppercase;border:1px solid transparent}
+  .pill.ok{background:var(--ok-bg);color:var(--ok);border-color:var(--ok-line)}
+  .pill.np{background:var(--np-bg);color:var(--np);border-color:var(--np-line)}
+
+  .summary .big{display:flex;align-items:center;gap:12px;border:1px solid var(--ok-line);background:var(--ok-bg);border-radius:14px;padding:14px}
+  .summary .big .l{width:16px;height:16px;border-radius:50%;background:var(--ok);flex:0 0 auto}
+  .summary .big b{color:var(--ink)}
+  .sumline{display:flex;align-items:center;gap:8px;padding:8px 2px;font-size:12.5px;color:var(--ink-2);border-bottom:1px solid var(--line-2)}
+  .sumline .pct{margin-left:auto;font-family:var(--mono);font-weight:700;color:var(--ink)}
+
+  /* right column: concept */
+  .concept h2{font-size:20px;margin:0 0 4px;font-weight:800;letter-spacing:-.01em}
+  .concept .sub{color:var(--muted);font-size:13px;margin-bottom:16px}
+  .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0 22px}
+  @media(max-width:1050px){.flow{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.flow{grid-template-columns:1fr}}
+  .fstep{border:1px solid var(--line);border-radius:13px;padding:13px 12px;background:var(--surface);position:relative}
+  .fstep .fn{width:26px;height:26px;border-radius:8px;background:var(--cyan-tint);color:var(--cyan-strong);display:grid;place-items:center;font-weight:800;font-size:12px;margin-bottom:9px}
+  .fstep b{display:block;font-size:13px;margin-bottom:3px}
+  .fstep span{font-size:11.5px;color:var(--muted);line-height:1.5}
+  .feat{border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;margin-bottom:14px;background:var(--surface)}
+  .feat .fh{display:flex;align-items:center;gap:10px;padding:12px 15px;background:var(--surface-2);border-bottom:1px solid var(--line-2)}
+  .feat .fh .ic{width:30px;height:30px;border-radius:9px;background:var(--cyan-tint);color:var(--cyan-strong);display:grid;place-items:center;flex:0 0 auto}
+  .feat .fh b{font-size:14px}
+  .feat ul{margin:0;padding:12px 15px 14px 32px;font-size:13px;color:var(--ink-2);line-height:1.6}
+  .feat ul li{margin:4px 0}
+  .feat ul li strong{color:var(--ink);font-weight:600}
+  .note{display:flex;gap:9px;font-size:12.5px;color:var(--ink-2);background:var(--cyan-tint);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:4px}
+  .note .ic{color:var(--cyan-strong);font-weight:800;flex:0 0 auto}
+  .hide{display:none!important}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="toolbar"><button class="tool" id="themeBtn" type="button">Dunkel</button></div>
+
+<div class="wrap">
+  <div class="eyebrow">Vorgangstool · DGUV V3</div>
+  <h1>Plan rein, Prüf-App raus.</h1>
+  <p class="lede">Ein Werkzeug für den ganzen Prüf-Vorgang: im Büro den PVA-Plan laden, die KI erzeugt daraus den anlagenspezifischen Prüfvorgang, und vor Ort arbeitet der Prüfer ihn am Handy Säule für Säule ab. Das Mockup rechts ist anklickbar: G/M/N tippen, Messwert eingeben, Ampel reagiert, Messstelle vor Ort ergänzen.</p>
+
+  <div class="grid">
+    <!-- PHONE -->
+    <div class="phone-wrap">
+      <div class="phone"><div class="screen">
+        <div class="statusbar"><span>9:41</span><span class="dots">● ● ● &nbsp;⌁&nbsp;100%</span></div>
+        <div class="appbar">
+          <div class="brand"><span class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M4 14h6l-1 6 11-12h-6l1-6z" fill="currentColor"/></svg></span><span><b>BLUESUN</b> <span>DGUV Prüf-App</span></span></div>
+          <div class="vorgang">
+            <div class="info"><b>PVA Österberg III</b><span id="stationLabel">Station 1 von 3 · selektive Zangenmessung</span></div>
+            <div class="ring">
+              <svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="var(--line)" stroke-width="4"/><circle id="ringFg" cx="22" cy="22" r="18" fill="none" stroke="var(--cyan)" stroke-width="4" stroke-linecap="round" stroke-dasharray="113" stroke-dashoffset="113"/></svg>
+              <span class="val" id="ringVal">0%</span>
+            </div>
+          </div>
+        </div>
+        <div class="stationbar" id="stationbar">
+          <div class="st-chip active">Station 1</div><div class="st-chip">Station 2</div><div class="st-chip">Station 3</div>
+          <div class="st-chip">Felder</div><div class="st-chip">GAK</div>
+        </div>
+        <div class="steps" id="steps">
+          <div class="step active" data-step="0"><span class="n">1</span>Besichtigen</div>
+          <div class="step" data-step="1"><span class="n">2</span>Erproben</div>
+          <div class="step" data-step="2"><span class="n">3</span>Messen</div>
+          <div class="step" data-step="3"><span class="n">✓</span>Fertig</div>
+        </div>
+
+        <div class="body" id="body"><!-- injected --></div>
+
+        <div class="toast" id="toast"><span>✓</span><span id="toastMsg">Gespeichert</span></div>
+        <div class="foot">
+          <button class="cta ghost" id="prevBtn" type="button">Zurück</button>
+          <button class="cta" id="nextBtn" type="button">Weiter</button>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- CONCEPT -->
+    <div class="concept">
+      <h2>Wie ich es aufbauen würde</h2>
+      <div class="sub">Zwei Hälften, eine Datenbasis: Vorbereitung im Büro, Ausführung am Handy. Alles hängt an der config-getriebenen Vorlage, die wir schon haben.</div>
+
+      <div class="flow">
+        <div class="fstep"><div class="fn">1</div><b>Plan laden</b><span>PVA-Plan (PDF/DWG) hochladen. RI01/RI02, Stationsschema.</span></div>
+        <div class="fstep"><div class="fn">2</div><b>Zwilling auslesen</b><span>KI erkennt Stationen, WR, GAK, Felder, Reihen → Komponentenbaum L1–L6.</span></div>
+        <div class="fstep"><div class="fn">3</div><b>Vorgang bauen</b><span>Config-Vorlage + Baum → anlagenspezifischer Prüfvorgang mit Grenzwerten.</span></div>
+        <div class="fstep"><div class="fn">4</div><b>Vor Ort prüfen</b><span>Handy: Besichtigen · Erproben · Messen, Messgerät wählen, live Ampel.</span></div>
+        <div class="fstep"><div class="fn">5</div><b>Bericht raus</b><span>Abschluss → unser PDF-Bericht → Finance + Folgebedarf.</span></div>
+      </div>
+
+      <div class="feat">
+        <div class="fh"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 5h16M4 12h16M4 19h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><b>Messgerät wählen &amp; vor Ort erweitern</b></div>
+        <ul>
+          <li>Je Messung ein <strong>Messgerät</strong> wählbar (Fluke 1654b, Fluke 1630, Benning PV 1-1 …) und die Messmethode (selektive Zange / Dreileiter). Geräteliste ist pflegbar.</li>
+          <li><strong>Grenzwert-Ampel live:</strong> Wert eingeben → grün/rot sofort aus der Config-Regel (z. B. R low &lt; 1 Ω, RCD &lt; 300 ms, IK als Formel aus der Sicherung).</li>
+          <li><strong>Umfang vor Ort erweiterbar:</strong> findet der Prüfer mehr als der Plan hergab (zusätzliche GAK, Reihe, Bauteil), fügt er Messstellen/Prüfpunkte hinzu. Der Vorgang wächst, der Zwilling wird korrigiert (Rückfluss in die Stammdaten).</li>
+        </ul>
+      </div>
+
+      <div class="feat">
+        <div class="fh"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><b>Was es trägt</b></div>
+        <ul>
+          <li><strong>Immer der gespiegelte Umfang:</strong> die drei DGUV-Säulen und alle Prüfpunkte kommen aus der Vorlage V1.5 — eine Config, jede Anlage.</li>
+          <li><strong>Offline-fest:</strong> im Park kein Netz nötig; Eingaben laufen in eine Sende-Queue und synchronisieren bei Netz-Rückkehr (wie das Techniker-Interface heute).</li>
+          <li><strong>Rollen/Qualifikation:</strong> nur befähigte Person / EFK bekommt den Vorgang (HSE-Gate). Mängel erzeugen einen Abzweig → neuer Vorgang (Nachverkauf).</li>
+          <li><strong>Skaliert:</strong> 100 Anlagen, 1000 Prüfer — kein Neubau je Park, nur Plan laden.</li>
+        </ul>
+      </div>
+
+      <div class="feat">
+        <div class="fh"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 3h6l1 3 3 1v6l-3 1-1 3H9l-1-3-3-1V7l3-1 1-3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.6"/></svg></span><b>Messgeräte-Verwaltung &amp; Kalibrierung</b></div>
+        <ul>
+          <li>Alle Messgeräte mit <strong>Codenummer / Inventar-Nr., Typ, Hersteller</strong> und dem <strong>Kalibrier-Zertifikat</strong> (PDF) hinterlegt.</li>
+          <li>Im Prüf-Ablauf sind nur Geräte mit <strong>gültiger Kalibrierung</strong> wählbar; jede Messung merkt sich, mit welchem Gerät (+ Zertifikat) sie erfasst wurde &rarr; rechtssicher im Bericht.</li>
+          <li><strong>Automatische Vorwarnung Monate vorher:</strong> ein Job prüft „gültig bis" und meldet fällige Rekalibrierungen (Telegram / Mail), bevor ein Zertifikat abläuft.</li>
+        </ul>
+      </div>
+
+      <div class="feat">
+        <div class="fh"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="6" rx="7" ry="3" stroke="currentColor" stroke-width="1.6"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3" stroke="currentColor" stroke-width="1.6"/></svg></span><b>Datenbank: eigene, kein Ninox-Umweg</b></div>
+        <ul>
+          <li>Die ganze DGUV-Geschichte wird <strong>nativ in unserer eigenen DB (Supabase BLUECORE)</strong> aufgebaut. Kein Spiegel/Kopie im Ninox nötig, weil das ein neuer Strang ist (Post-Ninox-Richtung, E-008).</li>
+          <li><strong>Kunde will eigene DB?</strong> Kein Problem: sauber mandantengetrennt (eigenes Schema bzw. eigenes Supabase-Projekt je Kunde). Unsere DB bleibt System of Record für den Prüfvorgang, der Kunde bekommt seine Anlagen-Daten in seine DB / sein Portal.</li>
+          <li>RBAC + Persistenz + Audit ab Tag 1, offline-Queue für den Feldeinsatz.</li>
+        </ul>
+      </div>
+
+      <div class="note"><span class="ic">↻</span><div>Andockpunkte bestehen schon: <strong>digitaler-zwilling</strong> (Plan-Auslesung), <strong>Vorlage V1.5</strong> (Prüfumfang + Grenzwerte), <strong>PV-Techniker-Interface</strong> (mobile Ausführung, S-06b/S-07) und der <strong>PDF-Berichtsgenerator</strong>. Das Tool verdrahtet sie zu einem Ablauf.</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement, tb=document.getElementById('themeBtn');
+  function cur(){var e=root.getAttribute('data-theme'); if(e)return e; return window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';}
+  function sync(){tb.textContent=cur()==='dark'?'Hell':'Dunkel';}
+  try{var s=localStorage.getItem('pa-theme'); if(s)root.setAttribute('data-theme',s);}catch(e){}
+  sync();
+  tb.onclick=function(){var n=cur()==='dark'?'light':'dark';root.setAttribute('data-theme',n);try{localStorage.setItem('pa-theme',n);}catch(e){}sync();};
+
+  // ---- data model (Station 1) ----
+  var besichtigen=[
+    {nr:'1.1',t:'Potentialausgleich · Korrosion',v:null},{nr:'1.2',t:'Potentialausgleich · Verbindungen',v:null},
+    {nr:'2.1',t:'Elektrische Betriebsmittel · Schäden',v:null},{nr:'4.1',t:'Überspannungsschutz · Verbindung',v:null},
+    {nr:'5.1',t:'NS-Verteilung · Anschluss',v:null},{nr:'6.1',t:'Äußerer Blitzschutz',v:'N'},
+    {nr:'7.1',t:'Kommunikation · Komponenten',v:null}
+  ];
+  var erproben=[
+    {nr:'2.2',t:'Funktion Betriebsmittel',v:null},{nr:'3.3',t:'Funktion ÜSS / Kontrollanzeige',v:null},
+    {nr:'10.1',t:'FI-/RCD-Prüftaste',v:null},{nr:'10.2',t:'Not-Aus-Schalter',v:null}
+  ];
+  var devices=['Fluke 1654b','Fluke 1630','Benning PV 1-1','＋ Gerät hinzufügen'];
+  var messen=[
+    {t:'Erdung · Pot-Schiene Raum',dev:'Fluke 1630',unit:'Ω',max:10,grz:'R_E < 10 Ω',v:'0.2'},
+    {t:'Niederohm · MS Schaltanlage',dev:'Fluke 1630',unit:'Ω',max:1,grz:'R low < 1 Ω',v:'0.6'},
+    {t:'Steckdose Station · RCD t',dev:'Fluke 1654b',unit:'ms',max:300,grz:'t_A < 300 ms',v:''}
+  ];
+
+  var step=0, addedOnSite=false, lastAdded='';
+  var body=document.getElementById('body'), toast=document.getElementById('toast'), toastMsg=document.getElementById('toastMsg');
+
+  function triBtns(item,arr,i){
+    function b(k,lab){return '<button class="'+k+(item.v===k?' on':'')+'" data-arr="'+arr+'" data-i="'+i+'" data-v="'+k+'">'+lab+'</button>';}
+    return '<span class="tri">'+b('G','G')+b('M','M')+b('N','N')+'</span>';
+  }
+  function checklist(arr,name,title){
+    var done=arr.filter(function(x){return x.v;}).length;
+    var h='<div class="card"><div class="card-h">'+title+'<span class="cnt">'+done+' / '+arr.length+'</span></div>';
+    arr.forEach(function(it,i){
+      h+='<div class="row"><span class="lbl">'+it.t+'<small>'+it.nr+'</small></span>'+triBtns(it,name,i)+'</div>';
+    });
+    return h+'</div>';
+  }
+  function measCard(){
+    var h='<div class="card"><div class="card-h">Messen · Station 1<span class="cnt" id="measCnt"></span></div>';
+    messen.forEach(function(m,i){
+      var opts=devices.map(function(d){return '<option'+(d===m.dev?' selected':'')+'>'+d+'</option>';}).join('');
+      h+='<div class="meas" data-i="'+i+'"><div class="top"><b>'+m.t+'</b><span class="lamp" data-lamp="'+i+'"></span></div>'
+        +'<div class="inrow"><select data-dev="'+i+'">'+opts+'</select>'
+        +'<input type="text" inputmode="decimal" placeholder="Wert" data-val="'+i+'" value="'+m.v+'"><span class="unit">'+m.unit+'</span></div>'
+        +'<div class="grz">Grenzwert: '+m.grz+'</div></div>';
+    });
+    h+='</div><button class="add" id="addMeas" type="button">＋ Messstelle vor Ort hinzufügen</button>';
+    return h;
+  }
+  function summary(){
+    var tot=besichtigen.length+erproben.length+messen.length;
+    var don=besichtigen.filter(x=>x.v).length+erproben.filter(x=>x.v).length+messen.filter(x=>x.v!=='').length;
+    var pct=Math.round(don/tot*100);
+    return '<div class="summary"><div class="big"><span class="l"></span><div><b>Station 1 · '+pct+'% erfasst</b><div style="font-size:12px;color:var(--ink-2)">Bei Abschluss aller Stationen wird der Prüfbericht erzeugt.</div></div></div>'
+      +'<div style="margin-top:12px">'
+      +'<div class="sumline">Besichtigen<span class="pct">'+besichtigen.filter(x=>x.v).length+'/'+besichtigen.length+'</span></div>'
+      +'<div class="sumline">Erproben<span class="pct">'+erproben.filter(x=>x.v).length+'/'+erproben.length+'</span></div>'
+      +'<div class="sumline">Messen<span class="pct">'+messen.filter(x=>x.v!=='').length+'/'+messen.length+'</span></div>'
+      +'</div>'
+      +(addedOnSite?'<div style="margin-top:14px;border:1px solid var(--cyan);background:var(--cyan-tint);border-radius:13px;padding:13px 14px"><div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px">Vor Ort ergänzt: „'+lastAdded+'"</div><div style="font-size:12px;color:var(--ink-2);margin-bottom:10px">In alle 3 Stationen übernehmen und in die Datenbank zurückpushen?</div><button class="cta" id="propBtn" type="button" style="width:100%">In alle Stationen übernehmen</button></div>':'')
+      +'<button class="cta" id="genBtn" type="button" style="width:100%;margin-top:16px">Prüfbericht erzeugen (PDF)</button></div>';
+  }
+
+  function render(){
+    document.querySelectorAll('.step').forEach(function(s){s.classList.toggle('active', +s.dataset.step===step);});
+    if(step===0) body.innerHTML=checklist(besichtigen,'b','Besichtigen · Sichtprüfung');
+    else if(step===1) body.innerHTML=checklist(erproben,'e','Erproben · Funktionsprüfung');
+    else if(step===2) body.innerHTML=measCard();
+    else body.innerHTML=summary();
+    document.getElementById('nextBtn').textContent = step>=3?'Station abschließen':'Weiter';
+    document.getElementById('prevBtn').style.visibility = step===0?'hidden':'visible';
+    updateProgress(); if(step===2) refreshLamps();
+    if(step===2){document.getElementById('measCnt').textContent=messen.filter(x=>x.v!=='').length+' / '+messen.length;}
+  }
+  function updateProgress(){
+    var tot=besichtigen.length+erproben.length+messen.length;
+    var don=besichtigen.filter(x=>x.v).length+erproben.filter(x=>x.v).length+messen.filter(x=>x.v!=='').length;
+    var pct=Math.round(don/tot*100);
+    document.getElementById('ringVal').textContent=pct+'%';
+    document.getElementById('ringFg').style.strokeDashoffset=(113-113*pct/100);
+    document.querySelectorAll('.step').forEach(function(s){
+      var i=+s.dataset.step, d=false;
+      if(i===0)d=besichtigen.every(x=>x.v); else if(i===1)d=erproben.every(x=>x.v); else if(i===2)d=messen.every(x=>x.v!=='');
+      s.classList.toggle('done',d && i!==step);
+    });
+  }
+  function lampState(m){
+    if(m.v===''||isNaN(parseFloat(m.v.replace(',','.'))))return '';
+    var val=parseFloat(m.v.replace(',','.'));
+    return val<=m.max?'ok':'bad';
+  }
+  function refreshLamps(){messen.forEach(function(m,i){var el=document.querySelector('[data-lamp="'+i+'"]');if(el){el.className='lamp '+lampState(m);}});}
+  function showToast(msg){toastMsg.textContent=msg;toast.classList.add('show');setTimeout(function(){toast.classList.remove('show');},1600);}
+
+  body.addEventListener('click',function(e){
+    var t=e.target.closest('button'); if(!t)return;
+    if(t.dataset.v){var arr=t.dataset.arr==='b'?besichtigen:erproben; arr[+t.dataset.i].v=t.dataset.v; render(); return;}
+    if(t.id==='addMeas'){lastAdded='Neue Messstelle (vor Ort)';addedOnSite=true;messen.push({t:lastAdded,dev:'Fluke 1630',unit:'Ω',max:10,grz:'R_E < 10 Ω',v:''});showToast('Messstelle hinzugefügt · am Stationsende übernehmbar');render();return;}
+    if(t.id==='propBtn'){addedOnSite=false;showToast('In alle 3 Stationen übernommen · wird zurückgepusht');render();return;}
+    if(t.id==='genBtn'){showToast('Prüfbericht wird erzeugt …');return;}
+  });
+  body.addEventListener('input',function(e){
+    var el=e.target;
+    if(el.dataset.val!==undefined){messen[+el.dataset.val].v=el.value; var lamp=document.querySelector('[data-lamp="'+el.dataset.val+'"]'); if(lamp)lamp.className='lamp '+lampState(messen[+el.dataset.val]); updateProgress(); document.getElementById('measCnt').textContent=messen.filter(x=>x.v!=='').length+' / '+messen.length;}
+  });
+  body.addEventListener('change',function(e){ if(e.target.dataset.dev!==undefined){messen[+e.target.dataset.dev].dev=e.target.value; if(e.target.value.indexOf('＋')===0){showToast('Geräteliste ist pflegbar');} } });
+
+  document.getElementById('steps').addEventListener('click',function(e){var s=e.target.closest('.step');if(s){step=+s.dataset.step;render();}});
+  document.getElementById('nextBtn').onclick=function(){ if(step>=3){showToast('Station 1 abgeschlossen · weiter zu Station 2');return;} step++;render();};
+  document.getElementById('prevBtn').onclick=function(){ if(step>0){step--;render();} };
+  document.getElementById('stationbar').addEventListener('click',function(e){var c=e.target.closest('.st-chip');if(c){document.querySelectorAll('.st-chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');document.getElementById('stationLabel').textContent=c.textContent+' · selektive Zangenmessung';showToast(c.textContent+' geladen (Mockup)');}});
+
+  render();
+})();
+</script>
